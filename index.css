@@ -1,8 +1,11 @@
 body {
-    background: slategrey
+    background: slategrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-h1, p {
+h1, p, button {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     text-align: center;
     color: lightgoldenrodyellow;
@@ -17,10 +20,18 @@ button {
     box-shadow: 20px 20px 100px;
     padding: 20px 30px;
     border: none;
-    color: lightgoldenrodyellow;
     display: block;
     margin: 4px auto;
     font-size: 1.5rem;
     font-weight: 600;
-    width: 70%;
+    width: 275px;
+}
+
+#new-card-button {
+    display: none;
+}
+
+#new {
+    display: none;
+    color: red;
 }
