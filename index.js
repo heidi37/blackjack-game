@@ -23,9 +23,7 @@ function getRandomCard() {
 
 function getDealerHand() {
     dealerHand = getRandomCard() + getRandomCard();
-    console.log(dealerHand);
 };
-
 
 function startGame() {
     renderGame();
