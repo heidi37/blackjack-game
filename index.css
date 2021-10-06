@@ -2,7 +2,7 @@ body {
     background: slategrey;
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
 }
 
 h1, p, button {
@@ -27,11 +27,15 @@ button {
     width: 275px;
 }
 
-#new-card-button {
+#new-card-button, #hold-button {
     display: none;
 }
 
 #new {
     display: none;
     color: red;
+}
+
+#message-el {
+    font-size: 1.5rem;
 }

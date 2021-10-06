@@ -5,13 +5,17 @@ let hasBlackJack = false;
 let isAlive = true;
 let message = "";
 let cards = [];
+let dealerHand = (Math.floor(Math.random() * (10)) + 2) + (Math.floor(Math.random() * (10)) + 2);
+console.log(dealerHand);
 
 const buttonStart = document.querySelector("#start-button");
 const newCardButton = document.querySelector("#new-card-button");
 let messageBlock = document.querySelector("#message-el");
 let cardsBlock = document.querySelector("#cards-el");
 let sumBlock = document.querySelector("#sum-el");
+let dealerBlock = document.querySelector("#dealer");
 let newSpan = document.querySelector("#new");
+let holdButton = document.querySelector("#hold-button");
 
 function startGame() {
     renderGame();
@@ -29,14 +33,18 @@ function showStartButton() {
     buttonStart.style.display = "block";
     newCardButton.style.display = "none";
     newSpan.style.display = "inline";
+    holdButton.style.display = "none";
     cards = [];
     sum = 0;
+    messageBlock.textContent = message;
+    dealerBlock.textContent = `Dealer's Sum: ${dealerHand}`;
 }
 
 function renderGame() {
     if (sum <= 20) {
-        message = "Do you want to draw a new card? 🙂";
+        message = "Do you want to draw a NEW CARD or HOLD? 🙂";
         newCardButton.style.display = "block";
+        holdButton.style.display = "block";
     } else if (sum === 21) {
         message = "Wohoo! You've got Blackjack! 🥳";
         hasBlackJack = true;
@@ -49,16 +57,30 @@ function renderGame() {
     messageBlock.textContent = message;
 }
 
-buttonStart.addEventListener("click", function () {
+buttonStart.addEventListener("click", () => {
     buttonStart.style.display = "none";
     getNewCard();
     getNewCard();
     startGame();
+    dealerBlock.textContent = `Dealer's Sum: ?`;
 });
 
 newCardButton.addEventListener("click", () => {
     getNewCard();
     renderGame();
+});
+
+holdButton.addEventListener("click", () => {
+    if (sum > dealerHand) {
+        message = "You Beat the House! 🥳";
+    } else if (sum === dealerHand) {
+        message = "You Tied the House! 😐";
+    }
+    else {
+        message = "The House Beat You! 😞";
+    }
+    showStartButton()
+
 });
 
 
