@@ -5,10 +5,11 @@ let hasBlackJack = false;
 let isAlive = true;
 let message = "";
 let cards = [];
-let dealerHand = (Math.floor(Math.random() * (10)) + 2) + (Math.floor(Math.random() * (10)) + 2);
+let dealerHand;
 
 const buttonStart = document.querySelector("#start-button");
 const newCardButton = document.querySelector("#new-card-button");
+
 let messageBlock = document.querySelector("#message-el");
 let cardsBlock = document.querySelector("#cards-el");
 let sumBlock = document.querySelector("#sum-el");
@@ -16,12 +17,22 @@ let dealerBlock = document.querySelector("#dealer");
 let newSpan = document.querySelector("#new");
 let holdButton = document.querySelector("#hold-button");
 
+function getRandomCard() {
+    return (Math.floor(Math.random() * (13)) + 1)
+}
+
+function getDealerHand() {
+    dealerHand = getRandomCard() + getRandomCard();
+    console.log(dealerHand);
+};
+
+
 function startGame() {
     renderGame();
 }
 
 function getNewCard() {
-    newCard = Math.floor(Math.random() * (10)) + 2;
+    newCard = getRandomCard();
     cards.push(newCard);
     sum += newCard;
     cardsBlock.textContent = ` Cards: ${cards.join(", ")}`;
@@ -60,6 +71,7 @@ buttonStart.addEventListener("click", () => {
     buttonStart.style.display = "none";
     getNewCard();
     getNewCard();
+    getDealerHand()
     startGame();
     dealerBlock.textContent = `Dealer's Sum: ?`;
 });
@@ -70,7 +82,7 @@ newCardButton.addEventListener("click", () => {
 });
 
 holdButton.addEventListener("click", () => {
-    if (sum > dealerHand) {
+    if ((sum > dealerHand && sum <= 21) || (sum < dealerHand && dealerHand > 21)) {
         message = "You Beat the House! 🥳";
     } else if (sum === dealerHand) {
         message = "You Tied the House! 😐";
