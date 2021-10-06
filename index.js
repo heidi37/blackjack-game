@@ -6,7 +6,6 @@ let isAlive = true;
 let message = "";
 let cards = [];
 let dealerHand = (Math.floor(Math.random() * (10)) + 2) + (Math.floor(Math.random() * (10)) + 2);
-console.log(dealerHand);
 
 const buttonStart = document.querySelector("#start-button");
 const newCardButton = document.querySelector("#new-card-button");
