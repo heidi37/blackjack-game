@@ -1,0 +1,26 @@
+body {
+    background: slategrey
+}
+
+h1, p {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    color: lightgoldenrodyellow;
+}
+
+h1 {
+    color: #222222;
+}
+
+button {
+    background: rgb(50, 50, 50, .8);
+    box-shadow: 20px 20px 100px;
+    padding: 20px 30px;
+    border: none;
+    color: lightgoldenrodyellow;
+    display: block;
+    margin: 4px auto;
+    font-size: 1.5rem;
+    font-weight: 600;
+    width: 70%;
+}
