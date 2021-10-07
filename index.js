@@ -6,6 +6,26 @@ let isAlive = false;
 let message = "";
 let cards = [];
 let dealerHand;
+let player = {
+    name: '',
+    chips: 145
+}
+
+let deck = [
+    { card: 'two', suits: ["♠️", "♦️", "♥️", "♣️"] },
+    { card: 'three', suits: ["♠️", "♦️", "♥️", "♣️"] },
+    { card: 'four', suits: ["♠️", "♦️", "♥️", "♣️"] },
+    { card: 'five', suits: ["♠️", "♦️", "♥️", "♣️"] },
+    { card: 'six', suits: ["♠️", "♦️", "♥️", "♣️"] },
+    { card: 'seven', suits: ["♠️", "♦️", "♥️", "♣️"] },
+    { card: 'eight', suits: ["♠️", "♦️", "♥️", "♣️"] },
+    { card: 'nine', suits: ["♠️", "♦️", "♥️", "♣️"] },
+    { card: 'ten and royalty', suits: ["♠️", "♦️", "♥️", "♣️", "♠️-Jack", "♦️-Jack", "♥️-Jack", "♣️-Jack", "♠️-queen", "♦️-queen", "♥️-queen", "♣️-queen", "♠️-king", "♦️-king", "♥️-king", "♣️-king"] },
+    { card: 'ace', suits: ["♠️-ace", "♦️-ace", "♥️-ace", "♣️-ace"] },
+]
+
+
+let deckCopy;
 
 const buttonStart = document.querySelector("#start-button");
 const newCardButton = document.querySelector("#new-card-button");
@@ -16,9 +36,17 @@ let sumBlock = document.querySelector("#sum-el");
 let dealerBlock = document.querySelector("#dealer");
 let newSpan = document.querySelector("#new");
 let holdButton = document.querySelector("#hold-button");
+let playerBlock = document.querySelector("#player-name");
+let welcomeName = document.querySelector("#welcome-name");
+
+player.name = prompt('What is your name?');
+welcomeName.textContent = player.name;
 
 function startGame() {
-    let isAlive = false;
+    deckCopy = deck;
+    isAlive = true;
+    dealerBlock.textContent = `Dealer's Sum: ?`;
+    playerBlock.textContent = `${player["name"]}: ${player.chips} chips`;
     renderGame();
 }
 
@@ -39,7 +67,12 @@ function getDealerHand() {
 
 function getNewCard() {
     newCard = getRandomCard();
-    cards.push(newCard);
+    let cardSuit = deckCopy[newCard - 2].suits[Math.floor(Math.random() * (deckCopy[newCard - 2].suits.length))];
+    let cardIndex = deckCopy[newCard - 2].suits.indexOf(cardSuit);
+    // remove card from deck copy
+    deckCopy[newCard - 2].suits.splice(cardIndex, 1);
+    let displayCard = newCard + " " + cardSuit;
+    cards.push(displayCard);
     sum += newCard;
     cardsBlock.textContent = ` Cards: ${cards.join(", ")}`;
     sumBlock.textContent = `Sum: ${sum}`;
@@ -65,21 +98,23 @@ function renderGame() {
         message = "Wohoo! You've got Blackjack! 🥳";
         hasBlackJack = true;
         showStartButton()
+        player.chips += 5;
     } else {
         message = "You're out of the game! 😭";
         isAlive = false;
         showStartButton();
+        player.chips -= 5;
     }
     messageBlock.textContent = message;
+    playerBlock.textContent = `${player["name"]}: ${player.chips} chips`;
 }
 
 buttonStart.addEventListener("click", () => {
     buttonStart.style.display = "none";
+    startGame();
     getNewCard();
     getNewCard();
     getDealerHand()
-    startGame();
-    dealerBlock.textContent = `Dealer's Sum: ?`;
 });
 
 newCardButton.addEventListener("click", () => {
@@ -90,16 +125,17 @@ newCardButton.addEventListener("click", () => {
 holdButton.addEventListener("click", () => {
     if ((sum > dealerHand && sum <= 21) || (sum < dealerHand && dealerHand > 21)) {
         message = "You Beat the House! 🥳";
+        player.chips += 5;
     } else if (sum === dealerHand) {
         message = "You Tied the House! 😐";
     }
     else {
         message = "The House Beat You! 😞";
+        isAlive = false;
+        player.chips -= 5;
     }
-    showStartButton()
+
+    playerBlock.textContent = `${player["name"]}: ${player.chips} chips`;
+    showStartButton();
 
 });
-
-
-
-
