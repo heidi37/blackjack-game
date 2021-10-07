@@ -2,7 +2,7 @@
 let newCard;
 let sum = 0;
 let hasBlackJack = false;
-let isAlive = true;
+let isAlive = false;
 let message = "";
 let cards = [];
 let dealerHand;
@@ -17,17 +17,25 @@ let dealerBlock = document.querySelector("#dealer");
 let newSpan = document.querySelector("#new");
 let holdButton = document.querySelector("#hold-button");
 
+function startGame() {
+    let isAlive = false;
+    renderGame();
+}
+
 function getRandomCard() {
-    return (Math.floor(Math.random() * (13)) + 1)
+    let randomNumber = (Math.floor(Math.random() * (13)) + 1)
+    if (randomNumber === 1) {
+        return 11;
+    } else if (randomNumber >= 11 && randomNumber <= 13) {
+        return 10;
+    } else {
+        return randomNumber;
+    }
 }
 
 function getDealerHand() {
     dealerHand = getRandomCard() + getRandomCard();
 };
-
-function startGame() {
-    renderGame();
-}
 
 function getNewCard() {
     newCard = getRandomCard();
