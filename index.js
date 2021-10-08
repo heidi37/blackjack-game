@@ -5,13 +5,14 @@ let hasBlackJack = false;
 let isAlive = false;
 let message = "";
 let cards = [];
-let dealerHand;
+let dealerHandSum;
 let player = {
     name: '',
     chips: 145
 }
 
 let deck = [
+    { card: 'one', suits: ["♠️ ace", "♦️ ace", "♥️ ace", "♣️ ace"] },
     { card: 'two', suits: ["♠️", "♦️", "♥️", "♣️"] },
     { card: 'three', suits: ["♠️", "♦️", "♥️", "♣️"] },
     { card: 'four', suits: ["♠️", "♦️", "♥️", "♣️"] },
@@ -20,8 +21,8 @@ let deck = [
     { card: 'seven', suits: ["♠️", "♦️", "♥️", "♣️"] },
     { card: 'eight', suits: ["♠️", "♦️", "♥️", "♣️"] },
     { card: 'nine', suits: ["♠️", "♦️", "♥️", "♣️"] },
-    { card: 'ten and royalty', suits: ["♠️", "♦️", "♥️", "♣️", "♠️-Jack", "♦️-Jack", "♥️-Jack", "♣️-Jack", "♠️-queen", "♦️-queen", "♥️-queen", "♣️-queen", "♠️-king", "♦️-king", "♥️-king", "♣️-king"] },
-    { card: 'ace', suits: ["♠️-ace", "♦️-ace", "♥️-ace", "♣️-ace"] },
+    { card: 'ten and royalty', suits: ["♠️", "♦️", "♥️", "♣️", "♠️ jack", "♦️ jack", "♥️ jack", "♣️ jack", "♠️ queen", "♦️ queen", "♥️ queen", "♣️ queen", "♠️ king", "♦️ king", "♥️ king", "♣️ king"] },
+    { card: 'ace', suits: ["♠️ ace", "♦️ ace", "♥️ ace", "♣️ ace"] },
 ]
 
 
@@ -47,13 +48,17 @@ function startGame() {
     isAlive = true;
     dealerBlock.textContent = `Dealer's Sum: ?`;
     playerBlock.textContent = `${player["name"]}: ${player.chips} chips`;
+    getNewCard();
+    getNewCard();
+    getDealerCard()
     renderGame();
 }
 
 function getRandomCard() {
     let randomNumber = (Math.floor(Math.random() * (13)) + 1)
     if (randomNumber === 1) {
-        return 11;
+        let howUseAce = parseInt(prompt("Do you want this Ace to count as 1 or 11?"));
+        return howUseAce;
     } else if (randomNumber >= 11 && randomNumber <= 13) {
         return 10;
     } else {
@@ -61,16 +66,21 @@ function getRandomCard() {
     }
 }
 
-function getDealerHand() {
-    dealerHand = getRandomCard() + getRandomCard();
+function getDealerCard() {
+    dealerCardOne = getRandomCard();
+    dealerCardTwo = getRandomCard();
+    dealerHandSum = dealerCardOne + dealerCardTwo;
+    console.log(dealerCardOne);
+    console.log(dealerCardTwo);
+    console.log(dealerHandSum);
 };
 
 function getNewCard() {
     newCard = getRandomCard();
-    let cardSuit = deckCopy[newCard - 2].suits[Math.floor(Math.random() * (deckCopy[newCard - 2].suits.length))];
-    let cardIndex = deckCopy[newCard - 2].suits.indexOf(cardSuit);
+    let cardSuit = deckCopy[newCard - 1].suits[Math.floor(Math.random() * (deckCopy[newCard - 1].suits.length))];
+    let cardIndex = deckCopy[newCard - 1].suits.indexOf(cardSuit);
     // remove card from deck copy
-    deckCopy[newCard - 2].suits.splice(cardIndex, 1);
+    deckCopy[newCard - 1].suits.splice(cardIndex, 1);
     let displayCard = newCard + " " + cardSuit;
     cards.push(displayCard);
     sum += newCard;
@@ -86,7 +96,7 @@ function showStartButton() {
     cards = [];
     sum = 0;
     messageBlock.textContent = message;
-    dealerBlock.textContent = `Dealer's Sum: ${dealerHand}`;
+    dealerBlock.textContent = `Dealer's Sum: ${dealerHandSum}`;
 }
 
 function renderGame() {
@@ -112,9 +122,6 @@ function renderGame() {
 buttonStart.addEventListener("click", () => {
     buttonStart.style.display = "none";
     startGame();
-    getNewCard();
-    getNewCard();
-    getDealerHand()
 });
 
 newCardButton.addEventListener("click", () => {
@@ -123,10 +130,10 @@ newCardButton.addEventListener("click", () => {
 });
 
 holdButton.addEventListener("click", () => {
-    if ((sum > dealerHand && sum <= 21) || (sum < dealerHand && dealerHand > 21)) {
+    if ((sum > dealerHandSum && sum <= 21) || (sum < dealerHandSum && dealerHandSum > 21)) {
         message = "You Beat the House! 🥳";
         player.chips += 5;
-    } else if (sum === dealerHand) {
+    } else if (sum === dealerHandSum) {
         message = "You Tied the House! 😐";
     }
     else {
