@@ -8,7 +8,7 @@ let cards = [];
 let dealerHandSum;
 let player = {
     name: '',
-    chips: 145
+    chips: 100
 }
 
 let deck = [
@@ -26,7 +26,8 @@ let deck = [
 ]
 
 
-let deckCopy;
+let deckCopy = [];
+
 
 const buttonStart = document.querySelector("#start-button");
 const newCardButton = document.querySelector("#new-card-button");
@@ -44,14 +45,28 @@ player.name = prompt('What is your name?');
 welcomeName.textContent = player.name;
 
 function startGame() {
-    deckCopy = deck;
+    // deckCopy = deck[0];
+    deckCopy = JSON.parse(JSON.stringify(deck));
     isAlive = true;
     dealerBlock.textContent = `Dealer's Sum: ?`;
-    playerBlock.textContent = `${player["name"]}: ${player.chips} chips`;
+    playerBlock.textContent = `${player["name"]}: $${player.chips}`;
     getNewCard();
     getNewCard();
     getDealerCard()
     renderGame();
+}
+
+function getNewCard() {
+    newCard = getRandomCard();
+    let cardSuit = deckCopy[newCard - 1].suits[Math.floor(Math.random() * (deckCopy[newCard - 1].suits.length))];
+    let cardIndex = deckCopy[newCard - 1].suits.indexOf(cardSuit);
+    // remove card from deck copy
+    deckCopy[newCard - 1].suits.splice(cardIndex, 1);
+    let displayCard = newCard + " " + cardSuit;
+    cards.push(displayCard);
+    sum += newCard;
+    cardsBlock.textContent = ` Cards: ${cards.join(", ")}`;
+    sumBlock.textContent = `Sum: ${sum}`;
 }
 
 function getRandomCard() {
@@ -67,25 +82,20 @@ function getRandomCard() {
 }
 
 function getDealerCard() {
-    dealerCardOne = getRandomCard();
-    dealerCardTwo = getRandomCard();
+    dealerCardOne = getRandomDealerCard();
+    dealerCardTwo = getRandomDealerCard();
     dealerHandSum = dealerCardOne + dealerCardTwo;
-    console.log(dealerCardOne);
-    console.log(dealerCardTwo);
-    console.log(dealerHandSum);
 };
 
-function getNewCard() {
-    newCard = getRandomCard();
-    let cardSuit = deckCopy[newCard - 1].suits[Math.floor(Math.random() * (deckCopy[newCard - 1].suits.length))];
-    let cardIndex = deckCopy[newCard - 1].suits.indexOf(cardSuit);
-    // remove card from deck copy
-    deckCopy[newCard - 1].suits.splice(cardIndex, 1);
-    let displayCard = newCard + " " + cardSuit;
-    cards.push(displayCard);
-    sum += newCard;
-    cardsBlock.textContent = ` Cards: ${cards.join(", ")}`;
-    sumBlock.textContent = `Sum: ${sum}`;
+function getRandomDealerCard() {
+    let randomNumber = (Math.floor(Math.random() * (13)) + 1)
+    if (randomNumber === 1) {
+        return 11;
+    } else if (randomNumber >= 11 && randomNumber <= 13) {
+        return 10;
+    } else {
+        return randomNumber;
+    }
 }
 
 function showStartButton() {
@@ -116,7 +126,7 @@ function renderGame() {
         player.chips -= 5;
     }
     messageBlock.textContent = message;
-    playerBlock.textContent = `${player["name"]}: ${player.chips} chips`;
+    playerBlock.textContent = `${player["name"]}: $${player.chips}`;
 }
 
 buttonStart.addEventListener("click", () => {
@@ -142,7 +152,7 @@ holdButton.addEventListener("click", () => {
         player.chips -= 5;
     }
 
-    playerBlock.textContent = `${player["name"]}: ${player.chips} chips`;
+    playerBlock.textContent = `${player["name"]}: $${player.chips}`;
     showStartButton();
 
 });
